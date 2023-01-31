@@ -1,7 +1,7 @@
 # admin-vue
 后台管理模板 , 默认分支vite + vue3 + ts
 
-预览地址[https://zzh948498.github.io/vue-admin-template](https://zzh948498.github.io/vue-admin-template)
+预览地址[https://zzh948498.github.io/vue-admin-template-gen](https://zzh948498.github.io/vue-admin-template-gen)
 
 fork 于 [https://github.com/PanJiaChen/vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)
 
@@ -17,7 +17,7 @@ pnpm i
 pnpm dev
 ```
 
-浏览器访问 [http://localhost:5173/vue-admin-template/](http://localhost:5173/vue-admin-template/)
+浏览器访问 [http://localhost:5173/vue-admin-template-gen/](http://localhost:5173/vue-admin-template-gen/)
 
 ## 发布
 
