@@ -1,0 +1,7 @@
+{
+    "server": {
+        "branch": "server",
+        "args": ["pnpm build:server"],
+        "outDir": "dist"
+    }
+}
