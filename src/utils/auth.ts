@@ -1,5 +1,5 @@
 import { vueLocalStorage } from './vueLocalStroge';
-const TokenKey = 'vue_admin_template_token';
+const TokenKey = 'vue_admin_template_gen_token';
 
 export function getToken() {
     return vueLocalStorage.getItem(TokenKey);

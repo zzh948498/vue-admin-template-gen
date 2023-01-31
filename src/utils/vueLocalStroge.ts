@@ -1,7 +1,7 @@
 import { LocalStorage } from '@zeronejs/utils';
 export interface LocalStorageEntities {
     // token
-    vue_admin_template_token: string;
+    vue_admin_template_gen_token: string;
     sidebarStatus: boolean;
     importForm: {
         url: string;
