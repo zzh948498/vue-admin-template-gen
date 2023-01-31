@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build:stage": "vite build --mode staging",
+    "build:server": "vite build --mode server",
     "build:prod": "vite build",
     "preview": "vite preview",
     "svgo": "svgo -f src/icons/svg",
