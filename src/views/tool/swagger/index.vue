@@ -1,9 +1,8 @@
 <template>
-    <i-frame v-model:src="url"></i-frame>
+    <iframe :src="url" frameborder="no" style="width: 100%; height: calc(100vh - 70px)" scrolling="auto" />
 </template>
 
 <script setup lang="ts">
-import iFrame from '@/components/iFrame/index.vue';
 import { ref } from 'vue';
 
 const url = ref(import.meta.env.VITE_APP_BASE_API + '/swagger-ui/index.html');

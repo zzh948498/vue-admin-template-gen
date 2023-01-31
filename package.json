@@ -1,5 +1,5 @@
 {
-  "name": "vue-admin-template-gen-code",
+  "name": "vue-admin-template-gen",
   "version": "1.0.0",
   "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
   "scripts": {

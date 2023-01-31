@@ -1,2 +1,2 @@
 User-agent: *
-Allow: /vue-admin-template/
+Allow: /vue-admin-template-gen/

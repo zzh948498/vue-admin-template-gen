@@ -95,7 +95,7 @@ export default ({ command }) => {
                 `,
             }),
         ],
-        base: '/vue-admin-template/',
+        base: '/vue-admin-template-gen/',
         server: {
             host: true,
             open: true,
