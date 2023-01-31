@@ -14,8 +14,12 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 const pathSrc = path.resolve(__dirname, 'src');
 const INVALID_CHAR_REGEX = /[\u0000-\u001F"#$&*+,:_;<=>?[\]^`{|}\u007F]/g;
 const DRIVE_LETTER_REGEX = /^[a-z]:/i;
-export default ({ command }) => {
+export default ({ command, mode }) => {
     const prodMock = true;
+    let base = '/vue-admin-template-gen/';
+    if (mode === 'server') {
+        base = '/static/vue-admin-template-gen/';
+    }
     return defineConfig({
         plugins: [
             vue(),
@@ -96,7 +100,7 @@ export default ({ command }) => {
                 `,
             }),
         ],
-        base: '/vue-admin-template-gen/',
+        base,
         server: {
             host: true,
             open: true,
