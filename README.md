@@ -1,9 +1,9 @@
 # admin-vue
-后台管理模板 , 默认分支vite + vue3 + ts
+后台管理模板(代码生成版) , vite + vue3 + ts
 
 预览地址[https://zzh948498.github.io/vue-admin-template-gen](https://zzh948498.github.io/vue-admin-template-gen)
 
-fork 于 [https://github.com/PanJiaChen/vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)
+后端node项目地址[https://github.com/zzh948498/vue-admin-template-gen-node](https://github.com/zzh948498/vue-admin-template-gen-node)
 
 ## Build Setup
 拉取本项目
