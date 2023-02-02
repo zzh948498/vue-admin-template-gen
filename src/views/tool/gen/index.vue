@@ -175,7 +175,6 @@
 import { GenTableCreateDto, GenTableEntity } from '@/api/interface';
 import { Edit, Delete, Download, Plus, Search, Refresh } from '@element-plus/icons-vue';
 import { ElModalConfirm } from '@/plugins/ElModal';
-import router from '@/router';
 import { dateFormat } from '@zeronejs/utils';
 import { ElMessage, FormInstance } from 'element-plus';
 import { ref, reactive, toRefs } from 'vue';
@@ -188,7 +187,8 @@ import {
     postGenTableRemoves,
     getGenCodeTemplates,
 } from '@/api/controller';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const open = ref(false);
 const tableList = ref<GenTableEntity[]>([]);
 const loading = ref(true);
@@ -198,7 +198,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const tableNames = ref<any[]>([]);
-const dateRange = ref<any[]>([]);
+const dateRange = ref<[Date, Date]>();
 const tableAddRef = ref<FormInstance>();
 const form = ref<GenTableCreateDto>({
     name: '',
@@ -290,7 +290,7 @@ getTemps();
 const queryRef = ref<FormInstance>();
 /** 重置按钮操作 */
 function resetQuery() {
-    dateRange.value = [];
+    dateRange.value = undefined;
     queryRef.value?.resetFields();
     handleQuery();
 }

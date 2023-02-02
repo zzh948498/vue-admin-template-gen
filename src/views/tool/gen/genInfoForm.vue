@@ -93,7 +93,7 @@ import { ref } from 'vue';
 import { lowerFirst } from 'lodash';
 import { ElMessage, FormInstance } from 'element-plus';
 import { PartialByKeys } from '@zeronejs/utils';
-import { Delete } from '@element-plus/icons-vue';
+import { Delete, QuestionFilled } from '@element-plus/icons-vue';
 import { deleteGenTableRelationsRemoveById } from '@/api/controller';
 import { ElModalConfirm } from '@/plugins/ElModal';
 const genInfoForm = ref<FormInstance>();
