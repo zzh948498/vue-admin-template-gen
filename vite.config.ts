@@ -107,7 +107,7 @@ export default ({ command, mode }) => {
             proxy: {
                 // https://cn.vitejs.dev/config/#server-proxy
                 '/dev-api': {
-                    target: 'http://127.0.0.1:5000',
+                    target: 'http://127.0.0.1:5010',
                     changeOrigin: true,
                     rewrite: p => p.replace(/^\/dev-api/, ''),
                 },
