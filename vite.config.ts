@@ -27,7 +27,7 @@ export default ({ command, mode }) => {
                 // registerType: 'autoUpdate',
                 includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
                 manifest: {
-                    name: 'Vue Typescript Admin',
+                    name: 'Vue Gen Typescript Admin',
                     // eslint-disable-next-line camelcase
                     short_name: 'Vue Ts Admin',
                     description: 'Description of your app',
