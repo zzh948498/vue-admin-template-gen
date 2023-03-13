@@ -1,0 +1,1 @@
+import{d as r,r as t,b as o,e as a}from"./runtime-core.esm-bundler-a0133d29.js";const s=["src"],p=r({__name:"index",setup(n){const e=t("/prod-api/swagger-ui/index.html");return e.value="http://127.0.0.1:5000/docs",(c,l)=>(o(),a("iframe",{src:e.value,frameborder:"no",style:{width:"100%",height:"calc(100vh - 70px)"},scrolling:"auto"},null,8,s))}});export{p as default};

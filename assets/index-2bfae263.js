@@ -1,0 +1,1 @@
+import{_ as o}from"./index-a10dbc98.js";import{_ as n}from"./plugin-vueexport-helper-c27b6911.js";import{b as c,e as t,v as r,q as s}from"./runtime-core.esm-bundler-a0133d29.js";import"./validate-63e2cccc.js";const _={};function a(i,m){const e=o;return c(),t("div",null,[r(" 表单构建 "),s(e,{"icon-class":"build"})])}const u=n(_,[["render",a]]);export{u as default};
