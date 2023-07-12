@@ -245,7 +245,16 @@ const { queryParams, preview } = toRefs(data);
 /** 查询表集合 */
 async function getList() {
     loading.value = true;
-    const { data } = await postGenTableList({});
+    const { data } = await postGenTableList({
+        where: {
+            name: queryParams.value.name,
+            desc: queryParams.value.desc,
+        },
+        limit: {
+            page: queryParams.value.page,
+            psize: queryParams.value.psize,
+        },
+    });
     tableList.value = data.data;
     total.value = data.total;
     loading.value = false;

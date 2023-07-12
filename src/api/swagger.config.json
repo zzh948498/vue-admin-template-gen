@@ -1,5 +1,5 @@
 {
-    "docsUrl": "http://127.0.0.1:5000/docs-json",
+    "docsUrl": "http://127.0.0.1:5010/docs-json",
     "includeTags": [],
     "excludeTags": ["dict", "dictData"],
     "axiosInstanceUrl": "@/utils/request",

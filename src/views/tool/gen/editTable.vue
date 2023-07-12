@@ -6,23 +6,20 @@
                     <basic-info-form ref="basicFormInstance" :info="info" />
                 </el-tab-pane>
                 <el-tab-pane label="字段信息" name="columnInfo">
-                    <el-row :gutter="10" class=" mb-2">
+                    <el-row :gutter="10" class="mb-2">
                         <el-col :span="1.5">
-                            <el-button
-                                type="primary"
-                                plain
-                                :icon="Plus"
-                                @click="addColumns"
+                            <el-button type="primary" plain :icon="Plus" @click="addColumns"
                                 >添加字段</el-button
                             >
                         </el-col>
                         <el-col :span="1.5">
-                            <el-button
-                                type="primary"
-                                plain
-                                :icon="Upload"
-                                @click="openImport"
+                            <el-button type="primary" plain :icon="Upload" @click="openImport"
                                 >导入字段</el-button
+                            >
+                        </el-col>
+                        <el-col :span="1.5">
+                            <el-button type="primary" plain :icon="Upload" @click="openImportInterface"
+                                >导入interface</el-button
                             >
                         </el-col>
                     </el-row>
@@ -207,6 +204,30 @@
                 </div>
             </template>
         </el-dialog>
+        <!-- 添加或修改角色配置对话框 -->
+        <el-dialog v-model="importInterfaceVisible" title="导入interface" width="700px" append-to-body>
+            <el-form
+                ref="importInterfaceFormRef"
+                :model="importInterfaceForm"
+                :rules="importInterfaceFormRules"
+                label-width="120px"
+            >
+                <el-form-item label="interface内容" prop="interface">
+                    <el-input
+                        v-model="importInterfaceForm.interface"
+                        type="textarea"
+                        :autosize="{ minRows: 30, maxRows: 50 }"
+                        placeholder="请输入interface内容"
+                    />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="submitImportInterfaceForm">确 定</el-button>
+                    <el-button @click="importInterfaceVisible = false">取 消</el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -234,6 +255,7 @@ import {
     postJsonDetails,
 } from '@/api/controller';
 import { vueLocalStorage } from '@/utils/vueLocalStroge';
+import { postImportInterface } from '@/api/controller/genTable/postImportInterface';
 const route = useRoute();
 const router = useRouter();
 type ColumnsListItem = PartialByKeys<GenColumnsEntity, 'id' | 'createdAt' | 'updatedAt' | 'table'>;
@@ -249,6 +271,7 @@ const columnsForm = ref<{
     columns: [],
 });
 const importVisible = ref(false);
+
 const dictOptions = ref<any[]>([]);
 const info = ref<GenTableEntity>();
 const basicFormInstance = ref<InstanceType<typeof basicInfoForm>>();
@@ -270,10 +293,12 @@ const importForm = ref({
     url: '',
     schema: '',
 });
+
 const importFormRules = ref({
     url: [{ required: true, message: '请输入swagger地址', trigger: 'blur' }],
     schema: [{ required: true, message: '请输入schema', trigger: 'blur' }],
 });
+
 const submiting = ref(false);
 const addColumns = () => {
     columnsForm.value.columns.push({
@@ -372,6 +397,67 @@ const openImport = () => {
         importForm.value = { ...localImportForm };
     }
 };
+// 导入interface模块
+const useImportInterface = () => {
+    const importInterfaceVisible = ref(false);
+    const importInterfaceFormRef = ref();
+    const importInterfaceForm = ref({
+        interface: '',
+    });
+    const importInterfaceFormRules = ref({
+        interface: [{ required: true, message: '请输入interface内容', trigger: 'blur' }],
+    });
+    const openImportInterface = () => {
+        importInterfaceVisible.value = true;
+    };
+    const submitImportInterfaceForm = async () => {
+        const valid = await importInterfaceFormRef.value?.validate();
+        if (!valid) return;
+        const { data } = await postImportInterface(importInterfaceForm.value);
+        for (const item of data.data) {
+            columnsForm.value.columns.push({
+                name: item.name,
+                /** 字段描述 */
+                desc: item.desc ?? 'string',
+                /** ts类型 */
+                tsType: item.tsType as any,
+                isEnum: false,
+                enumValues: undefined,
+                /** 插入 */
+                isInsert: true,
+                /** 编辑 */
+                isEdit: true,
+                /** 列表 */
+                isList: true,
+                /** 查询 */
+                isQuery: true,
+                /** 必填 */
+                required: item.hasQuestionToken,
+                /** 表id */
+                tableId: info.value?.id ?? 0,
+                htmlType: 'input',
+            });
+        }
+        ElMessage.success('操作成功');
+        importInterfaceVisible.value = false;
+    };
+    return {
+        importInterfaceVisible,
+        importInterfaceFormRef,
+        importInterfaceForm,
+        importInterfaceFormRules,
+        openImportInterface,
+        submitImportInterfaceForm,
+    };
+};
+const {
+    importInterfaceVisible,
+    importInterfaceFormRef,
+    importInterfaceForm,
+    importInterfaceFormRules,
+    openImportInterface,
+    submitImportInterfaceForm,
+} = useImportInterface();
 /** 导入字段按钮 */
 async function submitImportForm() {
     const valid = await importFormRef.value?.validate();
