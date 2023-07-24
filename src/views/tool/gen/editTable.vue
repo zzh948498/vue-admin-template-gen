@@ -75,22 +75,50 @@
                                     <el-checkbox v-model="scope.row.isEnum"></el-checkbox>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="插入" min-width="5%">
+                            <el-table-column min-width="5%">
+                                <template #header>
+                                    <editTableCheckTitle
+                                        v-model="columnsForm.columns"
+                                        label="插入"
+                                        columnKey="isInsert"
+                                    />
+                                </template>
                                 <template #default="scope">
                                     <el-checkbox v-model="scope.row.isInsert"></el-checkbox>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="编辑" min-width="5%">
+                            <el-table-column min-width="5%">
+                                <template #header>
+                                    <editTableCheckTitle
+                                        v-model="columnsForm.columns"
+                                        label="编辑"
+                                        columnKey="isEdit"
+                                    />
+                                </template>
                                 <template #default="scope">
                                     <el-checkbox v-model="scope.row.isEdit"></el-checkbox>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="列表" min-width="5%">
+                            <el-table-column min-width="5%">
+                                <template #header>
+                                    <editTableCheckTitle
+                                        v-model="columnsForm.columns"
+                                        label="列表"
+                                        columnKey="isList"
+                                    />
+                                </template>
                                 <template #default="scope">
                                     <el-checkbox v-model="scope.row.isList"></el-checkbox>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="查询" min-width="5%">
+                            <el-table-column min-width="5%">
+                                <template #header>
+                                    <editTableCheckTitle
+                                        v-model="columnsForm.columns"
+                                        label="查询"
+                                        columnKey="isQuery"
+                                    />
+                                </template>
                                 <template #default="scope">
                                     <el-checkbox v-model="scope.row.isQuery"></el-checkbox>
                                 </template>
@@ -109,7 +137,14 @@
                                 </el-select>
                             </template>
                         </el-table-column> -->
-                            <el-table-column label="必填" min-width="5%">
+                            <el-table-column min-width="5%">
+                                <template #header>
+                                    <editTableCheckTitle
+                                        v-model="columnsForm.columns"
+                                        label="必填"
+                                        columnKey="required"
+                                    />
+                                </template>
                                 <template #default="scope">
                                     <el-checkbox v-model="scope.row.required"></el-checkbox>
                                 </template>
@@ -238,7 +273,7 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { oneOf, PartialByKeys } from '@zeronejs/utils';
 import { GenColumnsEntity, GenTableEntity } from '@/api/interface';
-import { ElMessage, FormInstance } from 'element-plus';
+import { CheckboxValueType, ElMessage, FormInstance } from 'element-plus';
 import { ElModalConfirm } from '@/plugins/ElModal';
 import { Upload, Delete, Plus } from '@element-plus/icons-vue';
 
@@ -256,6 +291,7 @@ import {
 } from '@/api/controller';
 import { vueLocalStorage } from '@/utils/vueLocalStroge';
 import { postImportInterface } from '@/api/controller/genTable/postImportInterface';
+import editTableCheckTitle from './components/editTableCheckTitle.vue';
 const route = useRoute();
 const router = useRouter();
 type ColumnsListItem = PartialByKeys<GenColumnsEntity, 'id' | 'createdAt' | 'updatedAt' | 'table'>;
@@ -432,7 +468,7 @@ const useImportInterface = () => {
                 /** 查询 */
                 isQuery: true,
                 /** 必填 */
-                required: item.hasQuestionToken,
+                required: !item.hasQuestionToken,
                 /** 表id */
                 tableId: info.value?.id ?? 0,
                 htmlType: 'input',
@@ -553,4 +589,19 @@ const getList = async () => {
     }
 };
 getList();
+const useCheckTitle = (
+    key: keyof Pick<ColumnsListItem, 'isInsert' | 'isEdit' | 'isList' | 'isQuery' | 'required'>
+) => {
+    const checkAll = computed(() => columnsForm.value.columns.every(it => it[key]));
+    const isIndeterminate = computed(() => !checkAll.value && columnsForm.value.columns.some(it => it[key]));
+    const handleCheckAllChange = (val: CheckboxValueType) => {
+        columnsForm.value.columns.forEach(it => (it[key] = Boolean(val)));
+    };
+    return {
+        checkAll,
+        isIndeterminate,
+        handleCheckAllChange,
+    };
+};
+const { checkAll, isIndeterminate, handleCheckAllChange } = useCheckTitle('isInsert');
 </script>
