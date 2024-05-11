@@ -29,7 +29,9 @@
                             :data="columnsForm.columns"
                             row-key="id"
                             :max-height="tableHeight"
+                            @selectionChange="handleSelectionChange"
                         >
+                            <el-table-column fixed type="selection" width="55" align="center" />
                             <el-table-column label="序号" type="index" min-width="5%" />
                             <el-table-column label="字段列名" min-width="10%">
                                 <template #default="scope">
@@ -272,7 +274,7 @@ import genInfoForm from './genInfoForm.vue';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { oneOf, PartialByKeys } from '@zeronejs/utils';
-import { GenColumnsEntity, GenTableEntity } from '@/api/interface';
+import { DeepRequired, GenColumnsEntity, GenTableEntity } from '@/api/interface';
 import { CheckboxValueType, ElMessage, FormInstance } from 'element-plus';
 import { ElModalConfirm } from '@/plugins/ElModal';
 import { Upload, Delete, Plus } from '@element-plus/icons-vue';
@@ -589,19 +591,15 @@ const getList = async () => {
     }
 };
 getList();
-const useCheckTitle = (
-    key: keyof Pick<ColumnsListItem, 'isInsert' | 'isEdit' | 'isList' | 'isQuery' | 'required'>
-) => {
-    const checkAll = computed(() => columnsForm.value.columns.every(it => it[key]));
-    const isIndeterminate = computed(() => !checkAll.value && columnsForm.value.columns.some(it => it[key]));
-    const handleCheckAllChange = (val: CheckboxValueType) => {
-        columnsForm.value.columns.forEach(it => (it[key] = Boolean(val)));
-    };
-    return {
-        checkAll,
-        isIndeterminate,
-        handleCheckAllChange,
-    };
+const ids = ref<number[]>([]);
+// 单选
+const single = ref(true);
+// 是否选中了数据
+const multiple = ref(true);
+/** 多选框选中数据 */
+const handleSelectionChange = (selection: DeepRequired<ColumnsListItem[]>) => {
+    ids.value = selection.map(item => item.id);
+    single.value = selection.length !== 1;
+    multiple.value = !selection.length;
 };
-const { checkAll, isIndeterminate, handleCheckAllChange } = useCheckTitle('isInsert');
 </script>

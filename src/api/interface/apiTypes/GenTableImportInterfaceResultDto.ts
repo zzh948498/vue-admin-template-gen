@@ -4,7 +4,7 @@ export interface GenTableImportInterfaceResultDto {
     /** desc */
     desc: string;
     /** tsType */
-    tsType: string;
+    tsType: 'string' | 'number' | 'boolean' | 'Date';
     /** hasQuestionToken */
     hasQuestionToken: boolean;
 }

@@ -5,4 +5,6 @@ export interface GenTableGenCodeDto {
     formType: string;
     /** 模板 */
     template: string;
+    /** 接口地址 */
+    apiController: string;
 }

@@ -7,6 +7,8 @@ export interface GenTableEntity {
     name: string;
     /** 表描述 */
     desc: string;
+    /** 路由前缀 */
+    pathPrefix: string;
     /** 备注 */
     remark?: string;
     /** 创建时间 */

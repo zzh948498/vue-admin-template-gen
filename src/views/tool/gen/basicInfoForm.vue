@@ -13,6 +13,11 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
+                <el-form-item label="路由前缀" prop="pathPrefix">
+                    <el-input v-model="info.pathPrefix" placeholder="请输入" />
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
                 <el-form-item label="表类型" prop="tplCategory">
                     <el-select v-model="info.tplCategory">
                         <el-option label="单表（增删改查）" value="crud" />
@@ -49,6 +54,7 @@ const basicInfoForm = ref<FormInstance>();
 const rules = ref({
     name: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
     desc: [{ required: true, message: '请输入表描述', trigger: 'blur' }],
+    pathPrefix: [{ required: true, message: '请输入路由前缀', trigger: 'blur' }],
     tplCategory: [{ required: true, message: '请选择表类型', trigger: 'blur' }],
     // className: [{ required: true, message: '请输入实体类名称', trigger: 'blur' }],
     // functionAuthor: [{ required: true, message: '请输入作者', trigger: 'blur' }],

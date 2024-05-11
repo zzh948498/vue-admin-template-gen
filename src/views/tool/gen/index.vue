@@ -70,6 +70,7 @@
             </el-table-column>
             <el-table-column label="表名称" align="center" prop="name" :show-overflow-tooltip="true" />
             <el-table-column label="表描述" align="center" prop="desc" :show-overflow-tooltip="true" />
+            <el-table-column label="路由前缀" align="center" prop="pathPrefix" :show-overflow-tooltip="true" />
             <!-- <el-table-column label="实体" align="center" prop="className" :show-overflow-tooltip="true" /> -->
             <el-table-column label="创建时间" align="center" width="160">
                 <template #default="scope">
@@ -122,10 +123,10 @@
         />
         <!-- 添加或修改用户配置对话框 -->
         <el-dialog v-model="open" title="添加表" width="600px" append-to-body>
-            <el-form ref="tableAddRef" :model="form" :rules="rules" label-width="80px">
+            <el-form ref="tableAddRef" :model="form" :rules="rules" label-width="120px">
                 <!-- <el-row>
                     <el-col :span="12"> -->
-                <el-form-item label="表名称" prop="name">
+                <el-form-item label="表名称（英文）" prop="name">
                     <el-input v-model="form.name" placeholder="请输入表名称" maxlength="30" />
                 </el-form-item>
                 <!-- </el-col>
@@ -133,8 +134,11 @@
 
                 <!-- <el-row>
                     <el-col :span="12"> -->
-                <el-form-item label="表描述" prop="desc">
+                <el-form-item label="表描述（中文）" prop="desc">
                     <el-input v-model="form.desc" placeholder="表描述" maxlength="30" />
+                </el-form-item>
+                <el-form-item label="路由前缀" prop="pathPrefix">
+                    <el-input v-model="form.pathPrefix" placeholder="路由前缀" maxlength="30" />
                 </el-form-item>
                 <!-- </el-col>
                 </el-row> -->
@@ -159,6 +163,9 @@
                     <el-radio-group v-model="genform.template">
                         <el-radio v-for="it in tempList" :key="it" :label="it"> {{ it }}</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item label="接口地址" prop="apiController">
+                    <el-input v-model="apiController" />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -188,6 +195,7 @@ import {
     getGenCodeTemplates,
 } from '@/api/controller';
 import { useRouter } from 'vue-router';
+import { useLocalStorage } from '@vueuse/core';
 const router = useRouter();
 const open = ref(false);
 const tableList = ref<GenTableEntity[]>([]);
@@ -204,6 +212,7 @@ const form = ref<GenTableCreateDto>({
     name: '',
     desc: '',
     tplCategory: 'crud',
+    pathPrefix: '',
 });
 const rules = ref({
     name: [
@@ -211,6 +220,8 @@ const rules = ref({
         { min: 2, max: 80, message: '表名称长度必须介于 2 和 80 之间', trigger: 'blur' },
     ],
     desc: [{ required: true, message: '表描述不能为空', trigger: 'blur' }],
+    pathPrefix: [{ required: true, message: '路由前缀不能为空', trigger: 'blur' }],
+    
 });
 const data = reactive<{
     queryParams: {
@@ -272,8 +283,10 @@ function handleQuery() {
 const openGenDialog = ref(false);
 const genform = ref({
     formType: 'dialog',
-    template: 'element-plus',
+    template: 'giime',
 });
+const apiController = useLocalStorage('apiController', '@/api/controller');
+
 const genId = ref(0);
 /** 生成代码操作 */
 async function handleGenTable() {
@@ -284,6 +297,7 @@ async function handleGenTable() {
     const { data } = await postGenCode({
         ids: ids,
         ...genform.value,
+        apiController: apiController.value,
     });
     const arraybuffer = new Int8Array(data.data);
     // 再输入到 Blob 生成文件
