@@ -70,7 +70,12 @@
             </el-table-column>
             <el-table-column label="表名称" align="center" prop="name" :show-overflow-tooltip="true" />
             <el-table-column label="表描述" align="center" prop="desc" :show-overflow-tooltip="true" />
-            <el-table-column label="路由前缀" align="center" prop="pathPrefix" :show-overflow-tooltip="true" />
+            <el-table-column
+                label="路由前缀"
+                align="center"
+                prop="pathPrefix"
+                :show-overflow-tooltip="true"
+            />
             <!-- <el-table-column label="实体" align="center" prop="className" :show-overflow-tooltip="true" /> -->
             <el-table-column label="创建时间" align="center" width="160">
                 <template #default="scope">
@@ -138,7 +143,7 @@
                     <el-input v-model="form.desc" placeholder="表描述" maxlength="30" />
                 </el-form-item>
                 <el-form-item label="路由前缀" prop="pathPrefix">
-                    <el-input v-model="form.pathPrefix" placeholder="路由前缀" maxlength="30" />
+                    <el-input v-model="form.pathPrefix" placeholder="路由前缀" />
                 </el-form-item>
                 <!-- </el-col>
                 </el-row> -->
@@ -221,7 +226,6 @@ const rules = ref({
     ],
     desc: [{ required: true, message: '表描述不能为空', trigger: 'blur' }],
     pathPrefix: [{ required: true, message: '路由前缀不能为空', trigger: 'blur' }],
-    
 });
 const data = reactive<{
     queryParams: {

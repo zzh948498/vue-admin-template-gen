@@ -22,6 +22,11 @@
                                 >导入interface</el-button
                             >
                         </el-col>
+                        <el-col :span="1.5">
+                            <el-button type="danger" plain :icon="Delete" @click="batchDelete"
+                                >删除</el-button
+                            >
+                        </el-col>
                     </el-row>
                     <el-form ref="columnsFormRef" :model="columnsForm" :rules="rules" label-width="0">
                         <el-table
@@ -278,6 +283,7 @@ import { DeepRequired, GenColumnsEntity, GenTableEntity } from '@/api/interface'
 import { CheckboxValueType, ElMessage, FormInstance } from 'element-plus';
 import { ElModalConfirm } from '@/plugins/ElModal';
 import { Upload, Delete, Plus } from '@element-plus/icons-vue';
+import { v4 as uuidv4 } from 'uuid';
 
 import type { Schema } from 'swagger-schema-official';
 import {
@@ -296,7 +302,9 @@ import { postImportInterface } from '@/api/controller/genTable/postImportInterfa
 import editTableCheckTitle from './components/editTableCheckTitle.vue';
 const route = useRoute();
 const router = useRouter();
-type ColumnsListItem = PartialByKeys<GenColumnsEntity, 'id' | 'createdAt' | 'updatedAt' | 'table'>;
+type ColumnsListItem = PartialByKeys<GenColumnsEntity, 'id' | 'createdAt' | 'updatedAt' | 'table'> & {
+    tmpId?: string;
+};
 
 const activeName = ref('columnInfo');
 const tableHeight = ref(document.documentElement.scrollHeight - 245 + 'px');
@@ -340,6 +348,7 @@ const importFormRules = ref({
 const submiting = ref(false);
 const addColumns = () => {
     columnsForm.value.columns.push({
+        tmpId: uuidv4(),
         name: 'string',
         /** 字段描述 */
         desc: 'string',
@@ -428,6 +437,15 @@ async function handleDelete(row: ColumnsListItem, index: number) {
     ElMessage.success('删除成功');
     // const tableIds = row.tableId || ids.value;
 }
+
+const batchDelete = async () => {
+    await Promise.all(ids.value.map(it => deleteGenColumnsRemoveById({ id: it })));
+    columnsForm.value.columns = columnsForm.value.columns.filter(
+        it => !tmpIds.value.includes(it.tmpId ?? '') && !ids.value.includes(it.id ?? -1)
+    );
+    // await getList();
+    ElMessage.success('删除成功');
+};
 const openImport = () => {
     importVisible.value = true;
     const localImportForm = vueLocalStorage.getItem('importForm');
@@ -454,6 +472,7 @@ const useImportInterface = () => {
         const { data } = await postImportInterface(importInterfaceForm.value);
         for (const item of data.data) {
             columnsForm.value.columns.push({
+                tmpId: uuidv4(),
                 name: item.name,
                 /** 字段描述 */
                 desc: item.desc ?? 'string',
@@ -592,13 +611,17 @@ const getList = async () => {
 };
 getList();
 const ids = ref<number[]>([]);
+const tmpIds = ref<string[]>([]);
 // 单选
 const single = ref(true);
 // 是否选中了数据
 const multiple = ref(true);
 /** 多选框选中数据 */
 const handleSelectionChange = (selection: DeepRequired<ColumnsListItem[]>) => {
-    ids.value = selection.map(item => item.id);
+    console.log(selection);
+    ids.value = selection.filter(it => it.id).map(item => item.id);
+    tmpIds.value = selection.filter(it => it.tmpId).map(item => item.tmpId);
+
     single.value = selection.length !== 1;
     multiple.value = !selection.length;
 };
