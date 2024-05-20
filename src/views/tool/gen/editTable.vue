@@ -475,7 +475,7 @@ const useImportInterface = () => {
                 tmpId: uuidv4(),
                 name: item.name,
                 /** 字段描述 */
-                desc: item.desc ?? 'string',
+                desc: item.desc || item.name || 'string',
                 /** ts类型 */
                 tsType: item.tsType as any,
                 isEnum: false,
