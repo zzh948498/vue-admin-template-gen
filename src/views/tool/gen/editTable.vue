@@ -356,13 +356,13 @@ const addColumns = () => {
         tsType: 'string',
         isEnum: false,
         /** 插入 */
-        isInsert: true,
+        isInsert: false,
         /** 编辑 */
-        isEdit: true,
+        isEdit: false,
         /** 列表 */
         isList: true,
         /** 查询 */
-        isQuery: true,
+        isQuery: false,
         /** 必填 */
         required: false,
         /** 表id */
@@ -481,13 +481,13 @@ const useImportInterface = () => {
                 isEnum: false,
                 enumValues: undefined,
                 /** 插入 */
-                isInsert: true,
+                isInsert: false,
                 /** 编辑 */
-                isEdit: true,
+                isEdit: false,
                 /** 列表 */
                 isList: true,
                 /** 查询 */
-                isQuery: true,
+                isQuery: false,
                 /** 必填 */
                 required: !item.hasQuestionToken,
                 /** 表id */
@@ -564,13 +564,13 @@ async function submitImportForm() {
                 isEnum,
                 enumValues,
                 /** 插入 */
-                isInsert: true,
+                isInsert: false,
                 /** 编辑 */
-                isEdit: true,
+                isEdit: false,
                 /** 列表 */
                 isList: true,
                 /** 查询 */
-                isQuery: true,
+                isQuery: false,
                 /** 必填 */
                 required: false,
                 /** 表id */
