@@ -224,7 +224,7 @@
             </el-tabs>
             <el-form label-width="100px">
                 <div style="text-align: center; margin-left: -100px; margin-top: 10px">
-                    <el-button type="primary" @click="submitForm()">提交</el-button>
+                    <el-button type="primary" :loading="submiting" @click="submitForm()">提交</el-button>
                     <el-button @click="close()">返回</el-button>
                 </div>
             </el-form>
@@ -379,38 +379,42 @@ async function submitForm() {
         return;
     }
     submiting.value = true;
-    const [basicCheck, columnsCheck, genInfoCheck] = await Promise.all(
-        [basicForm!, columnsFormRef.value!, genInfoForm!].map(getFormPromise)
-    );
-    if (!basicCheck) {
+    try {
+        const [basicCheck, columnsCheck, genInfoCheck] = await Promise.all(
+            [basicForm!, columnsFormRef.value!, genInfoForm!].map(getFormPromise)
+        );
+        if (!basicCheck) {
+            return ElMessage.error('基本信息校验未通过，请重新检查提交内容');
+        } else if (!columnsCheck) {
+            return ElMessage.error('字段校验未通过，请重新检查提交内容');
+        } else if (!genInfoCheck) {
+            return ElMessage.error('关系信息校验未通过，请重新检查提交内容');
+        }
+        const createColumns = columnsForm.value.columns.filter(it => !it.id);
+        // 创建的话  先一个一个创建 避免顺序错乱
+        for (const it of createColumns) {
+            await postGenColumnsCreate(it);
+        }
+        await Promise.all([
+            ...columnsForm.value.columns.map(it => {
+                if (!it.id) {
+                    return;
+                }
+                return patchGenColumnsUpdateById({ id: it.id }, it);
+            }),
+            patchGenTableUpdateById({ id: info.value!.id }, info.value ?? {}),
+            ...(genFormInstance.value?.relationsForm.relations.map(it => {
+                if (!it.id) {
+                    return postGenTableRelationsCreate(it);
+                }
+                return patchGenTableRelationsUpdateById({ id: it.id }, it);
+            }) ?? []),
+        ]);
+        ElMessage.success('操作成功');
+        await getList();
+    } finally {
         submiting.value = false;
-        return ElMessage.error('基本信息校验未通过，请重新检查提交内容');
-    } else if (!columnsCheck) {
-        submiting.value = false;
-        return ElMessage.error('字段校验未通过，请重新检查提交内容');
-    } else if (!genInfoCheck) {
-        submiting.value = false;
-        return ElMessage.error('关系信息校验未通过，请重新检查提交内容');
     }
-
-    await Promise.all([
-        ...columnsForm.value.columns.map(it => {
-            if (!it.id) {
-                return postGenColumnsCreate(it);
-            }
-            return patchGenColumnsUpdateById({ id: it.id }, it);
-        }),
-        patchGenTableUpdateById({ id: info.value!.id }, info.value ?? {}),
-        ...(genFormInstance.value?.relationsForm.relations.map(it => {
-            if (!it.id) {
-                return postGenTableRelationsCreate(it);
-            }
-            return patchGenTableRelationsUpdateById({ id: it.id }, it);
-        }) ?? []),
-    ]);
-    ElMessage.success('操作成功');
-    await getList();
-    submiting.value = false;
 }
 function getFormPromise(form: FormInstance) {
     return new Promise(resolve => {
