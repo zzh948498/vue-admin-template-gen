@@ -7,4 +7,6 @@ export interface GenTableGenCodeDto {
     template: string;
     /** 接口地址 */
     apiController: string;
+    /** 是否有 产品需求文档 */
+    hasPRD?: boolean;
 }

@@ -285,10 +285,12 @@ function handleQuery() {
     getList();
 }
 const openGenDialog = ref(false);
-const genform = ref({
-    formType: 'dialog',
-    template: 'giime',
-});
+
+const genform = useLocalStorage(
+    'genform',
+    { formType: 'dialog', template: 'giime' },
+    { listenToStorageChanges: false }
+);
 const apiController = useLocalStorage('apiController', '@/api/controller');
 
 const genId = ref(0);
@@ -303,10 +305,10 @@ async function handleGenTable() {
         ...genform.value,
         apiController: apiController.value,
     });
-    const arraybuffer = new Int8Array(data.data);
+    const arraybuffer = new Int8Array(data.data.value);
     // 再输入到 Blob 生成文件
-    const blob = new Blob([arraybuffer], { type: 'application/zip' });
-    saveAs(blob, 'ruoyi.zip');
+    const blob = new Blob([arraybuffer], { type: data.data.type });
+    saveAs(blob, data.data.fileName);
 }
 const tempList = ref<string[]>([]);
 const getTemps = async () => {

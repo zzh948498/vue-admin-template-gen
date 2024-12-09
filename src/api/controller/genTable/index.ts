@@ -9,3 +9,4 @@ export * from "./postGenTableRemoves";
 export * from "./postGenCode";
 export * from "./postImportInterface";
 export * from "./getGenCodeTemplates";
+export * from "./getGenAiGetTemplate";

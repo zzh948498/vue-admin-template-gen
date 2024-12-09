@@ -9,6 +9,7 @@ export * from "./apiTypes/Limit";
 export * from "./apiTypes/GenColumnsListDto";
 export * from "./apiTypes/GenColumnsUpdateDto";
 export * from "./apiTypes/GenTableImportInterfaceResultDto";
+export * from "./apiTypes/GenTableGenCodeResultDto";
 export * from "./apiTypes/GenTableCreateDto";
 export * from "./apiTypes/GenTableListWhereDto";
 export * from "./apiTypes/GenTableListDto";

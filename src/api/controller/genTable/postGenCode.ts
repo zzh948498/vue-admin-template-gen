@@ -1,8 +1,8 @@
 import request from "@/utils/request";
-import { RListDto, DeepRequired, GenTableGenCodeDto } from "../../interface";
+import { RDto, GenTableGenCodeResultDto, DeepRequired, GenTableGenCodeDto } from "../../interface";
 
-export interface PostGenCodeResult extends RListDto {
-    data: number[];
+export interface PostGenCodeResult extends RDto {
+    data: GenTableGenCodeResultDto;
 }
 
 /**
